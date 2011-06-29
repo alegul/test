@@ -16,6 +16,69 @@
 		<commons-io.version>1.4</commons-io.version>
 	</properties>
 
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<encoding>Windows-1251</encoding>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>buildnumber-maven-plugin</artifactId>
+					<version>1.0-beta-3</version>
+					<executions>
+						<execution>
+							<phase>validate</phase>
+							<goals>
+								<goal>create</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<format>{0,date,yyyy-MM-dd HH:mm:ss}</format>
+						<revisionOnScmFailure/>
+						<buildNumberPropertyName>buildTime</buildNumberPropertyName>
+						<items>
+							<item>timestamp</item>
+						</items>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.2</version>
+					<configuration>
+						<archive>
+							<addMavenDescriptor>false</addMavenDescriptor>
+							<manifestEntries>
+								<!--suppress MavenModelInspection -->
+								<Buildserver-projectname>${job.name}</Buildserver-projectname>
+								<Build-number>${buildserver.buildnumber}</Build-number>
+								<Revision-number>${build.vcs.number}</Revision-number>
+								<!--suppress MavenModelInspection -->
+								<Build-time>${buildTime}</Build-time>
+								<!-- Don`t change  Implementation-Vendor because it use in sufd java class-->
+								<Implementation-Vendor>Integration Systems</Implementation-Vendor>
+								<!--suppress MavenModelInspection -->
+								<Implementation-Version>${implementation.version}</Implementation-Version>
+								<Implementation-Title>${project.description}</Implementation-Title>
+							</manifestEntries>
+						</archive>
+					</configuration>
+
+				</plugin>
+
+			</plugins>
+
+		</pluginManagement>
+	</build>
+
+
   <modules>
 	<module>test-core</module>
   </modules>
